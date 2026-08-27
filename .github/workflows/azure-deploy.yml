@@ -115,6 +115,7 @@ jobs:
             --password "$ACR_PASS" \
             --output none
 
+          # Ephemeral /app/data: do not remount Azure Files (SQLite locks there).
           az containerapp update \
             --name "$OPENWA_APP" \
             --resource-group "$OPENWA_RG" \
@@ -124,6 +125,9 @@ jobs:
               "ALLOW_DEV_API_KEY=false" \
               "AUTO_START_SESSIONS=true" \
               "NODE_ENV=production" \
+              "PORT=2785" \
+              "DATABASE_TYPE=sqlite" \
+              "DATABASE_SYNCHRONIZE=true" \
               "API_MASTER_KEY=secretref:api-master-key" \
             --cpu 0.75 \
             --memory 1.5Gi \
